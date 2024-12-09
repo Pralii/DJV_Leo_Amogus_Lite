@@ -1,0 +1,24 @@
+- Characters
+	Player
+	Crewmates
+	
+- Mechanics
+	movement*
+	interest points*
+	AIs*
+	deaths
+	vote
+	win/lose
+
+- Level design
+	-Map
+	-Emergency meeting
+	-Interest points
+
+- UI
+	minimap?
+	Where to go?
+	voting screen
+	Mainmenu
+	G.O.
+	
