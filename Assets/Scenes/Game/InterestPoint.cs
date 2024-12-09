@@ -19,10 +19,26 @@ public class InterestPoint : MonoBehaviour
         _transform = GetComponent<Transform>();
         _interestedPeople = new List<PeopleAI>();
     }
+    private bool isVisible()
+    {
+        //This is Code with missing elements ? (Camera?)
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+
+        foreach (var plane in planes)
+        {
+            if (plane.GetDistanceToPoint(transform.position) <= -ipRadius)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
     //check the number of impostors/innocent in the people present, and if the player is not here, UNALIVE an innocent
     private IEnumerator TryKilling()
     {
+
         foreach (var personAI in _interestedPeople)
         {
             Debug.Log("tried changing interest.");

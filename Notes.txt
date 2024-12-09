@@ -6,19 +6,19 @@
 	movement*
 	interest points*
 	AIs*
-	deaths
+*	deaths
 	vote
 	win/lose
 
 - Level design
-	-Map
+*	-Map
 	-Emergency meeting
 	-Interest points
 
 - UI
 	minimap?
 	Where to go?
-	voting screen
+*	voting screen
 	Mainmenu
 	G.O.
 	
