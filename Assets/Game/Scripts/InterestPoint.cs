@@ -6,13 +6,12 @@ using UnityEngine;
 public class InterestPoint : MonoBehaviour
 {
     //Interest point does the kills and redirections: It is aware of the people that must gather around it, who is close or not. When everyone is gathered, it waits a lil' and then tries to get a murder going. Successful or not it redirects everyone towards another interest point.
-    private Collider[] _colliderList = new Collider[128];
     [SerializeField] private List<InterestPoint> otherInterestPoints;
     [SerializeField] private float ipRadius;
     private List<PeopleAI> _interestedPeople;
     private List<Transform> _interestedPeopleTransforms;
-    private float _killCooldown = 5f;
-    private float _killCharge = 5f;
+    private float _killCooldown = 3f;
+    private float _killCharge = 3f;
     void Awake()
     {
         _interestedPeople = new List<PeopleAI>();
@@ -104,7 +103,7 @@ public class InterestPoint : MonoBehaviour
                     _killCharge = _killCooldown;
                 }
             }
-            else
+            else 
             {
                 _killCharge = _killCooldown;
             }

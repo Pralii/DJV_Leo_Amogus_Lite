@@ -1,17 +1,17 @@
 - Characters
-	Player
-	Crewmates
+	Player*
+	Crewmates (random color*, names?)
 	
 - Mechanics
 	movement*
 	interest points*
 	AIs*
-*	deaths
+	deaths*
 	vote
 	win/lose
 
 - Level design
-*	-Map
+	-Map*
 	-Emergency meeting
 	-Interest points
 

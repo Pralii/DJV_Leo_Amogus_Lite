@@ -18,7 +18,7 @@ public class PeopleAI : MonoBehaviour
     void Start()
     {
         _isAlive = true;
-        GetComponentInChildren<Renderer>().material.color = Color.HSVToRGB(Random.value, 1f, 1f);
+        GetComponentInChildren<Renderer>().material.color = Color.HSVToRGB(Random.value, 1-Random.value*0.5f, 1-Random.value*0.5f);
         StartCoroutine(MoveTowardsInterest());
     }
 
