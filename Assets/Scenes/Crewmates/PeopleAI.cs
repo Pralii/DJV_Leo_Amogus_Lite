@@ -1,5 +1,6 @@
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PeopleAI : MonoBehaviour
@@ -7,6 +8,7 @@ public class PeopleAI : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float angularSpeed;
     [SerializeField] private float ipProximity;
+    [SerializeField] private GameObject originalCorpse;
     private Vector3 _interestPoint;
     private Vector3 _targetPlace;
     private bool _isAlive;
@@ -16,6 +18,7 @@ public class PeopleAI : MonoBehaviour
     void Start()
     {
         _isAlive = true;
+        GetComponentInChildren<Renderer>().material.color = Color.HSVToRGB(Random.value, 1f, 1f);
         StartCoroutine(MoveTowardsInterest());
     }
 
@@ -30,20 +33,19 @@ public class PeopleAI : MonoBehaviour
     {
         _isAlive = false;
         //Change model
-        transform.position += new Vector3(0,-0.8f,0);
+        transform.position = new Vector3(transform.position.x , 0.25f, transform.position.z);
+        transform.Rotate(Vector3.forward, 90);;
     }
 
     public IEnumerator MoveTowardsInterest()
     {
         if (_isAlive)
         {
-            while ((_targetPlace - transform.position).magnitude > 0.2f)
+            while (_isAlive && (_targetPlace - transform.position).magnitude > 0.2f)
             {
-                transform.Translate(speed * Time.deltaTime * (_targetPlace - transform.position).normalized);
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    Quaternion.LookRotation(_targetPlace - transform.position),
-                    angularSpeed * Time.deltaTime);
+                transform.LookAt(_targetPlace);
+                transform.position += (speed * Time.deltaTime * (_targetPlace - transform.position).normalized);
+                
                 yield return null;
             }
 

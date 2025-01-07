@@ -10,14 +10,13 @@ public class InterestPoint : MonoBehaviour
     [SerializeField] private List<InterestPoint> otherInterestPoints;
     [SerializeField] private float ipRadius;
     private List<PeopleAI> _interestedPeople;
+    private List<Transform> _interestedPeopleTransforms;
     private float _killCooldown = 5f;
     private float _killCharge = 5f;
-    private Transform _transform;
-
     void Awake()
     {
-        _transform = GetComponent<Transform>();
         _interestedPeople = new List<PeopleAI>();
+        _interestedPeopleTransforms = new List<Transform>();
     }
     private bool isVisible()
     {
@@ -26,7 +25,7 @@ public class InterestPoint : MonoBehaviour
 
         foreach (var plane in planes)
         {
-            if (plane.GetDistanceToPoint(transform.position) <= -ipRadius)
+            if (plane.GetDistanceToPoint(transform.position) <= -ipRadius/2)
             {
                 return false;
             }
@@ -39,20 +38,45 @@ public class InterestPoint : MonoBehaviour
     private IEnumerator TryKilling()
     {
 
+        var innocentPeople = new List<PeopleAI>();
+        int impostorCount = 0;
+        int innocentCount = 0;
+        foreach (var personAI in _interestedPeople)
+        {
+            if (personAI.isImpostor)
+            {
+                impostorCount++;
+            }
+            else
+            {
+                innocentPeople.Add(personAI);
+                innocentCount++;
+            }
+        }
+
+        if (!isVisible() && innocentCount > 0 && impostorCount >= innocentCount)
+        {
+            var killedGuy = innocentPeople[Random.Range(0, innocentPeople.Count)];
+            _interestedPeople.Remove(killedGuy);
+            killedGuy.Unalive();
+        }
+
         foreach (var personAI in _interestedPeople)
         {
             Debug.Log("tried changing interest.");
             otherInterestPoints[Random.Range(0, otherInterestPoints.Count)].GetThisPersonInterested(personAI);
-                
         }
         _interestedPeople.Clear();
+        _interestedPeopleTransforms.Clear();
         yield return null;
     }
 
     public void GetThisPersonInterested(PeopleAI personAI)
     {
         _interestedPeople.Add(personAI);
-        personAI.DefineNewInterest(_transform.position);
+        _interestedPeopleTransforms.Add(personAI.GetComponent<Transform>());
+
+        personAI.DefineNewInterest(transform.position);
     }
 
     //Check if everyonen is here, then try killing, with a cooldown. Then redirect everyone to other places.
@@ -60,23 +84,13 @@ public class InterestPoint : MonoBehaviour
     {
         if (_interestedPeople.Count != 0)
         {
-            int colliderNbr = Physics.OverlapSphereNonAlloc(transform.position, ipRadius, _colliderList);
             int closePeopleNbr = 0;
-            for (int i = 0; i < colliderNbr; i++)
+            foreach (var t in _interestedPeopleTransforms)
             {
 
-                try
+                if ((transform.position - t.position).magnitude < ipRadius)
                 {
-                    PeopleAI personAI = _colliderList[i].GetComponentInParent<PeopleAI>();
-                    if (_interestedPeople.Contains(personAI))
-                    {
-                        closePeopleNbr++;
-                    }
-                }
-                catch (System.NullReferenceException)
-                {
-
-
+                    closePeopleNbr++;
                 }
             }
 

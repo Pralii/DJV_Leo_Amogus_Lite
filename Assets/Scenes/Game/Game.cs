@@ -11,8 +11,8 @@ public class Game : MonoBehaviour
     [SerializeField] private PlayerCharacter player;
     [SerializeField] private GameObject instanciablePerson;
     private List<GameObject> _peopleList;
-    [SerializeField] private int _peopleCount;
-    [SerializeField] private int _impostorsCount;
+    [SerializeField] private int totalPeopleCount;
+    [SerializeField] private int impostorsCount;
     private Vector3 _spawnZone = new Vector3(0, 0, 0);
     
     private void ShowMenuUI()
@@ -23,7 +23,7 @@ public class Game : MonoBehaviour
     private void StartGame()
     {
         //add impostors
-        for (int i = 0; i < _impostorsCount; i++)
+        for (int i = 0; i < impostorsCount; i++)
         {
             Vector2 displacement = 5f * Random.insideUnitCircle;
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
@@ -34,7 +34,7 @@ public class Game : MonoBehaviour
             newPerson.SetActive(true);
         }
         //add normal people
-        for (int i = _impostorsCount; i < _peopleCount; i++)
+        for (int i = impostorsCount; i < totalPeopleCount; i++)
         {
             Vector2 displacement = 5f * Random.insideUnitCircle;
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
