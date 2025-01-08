@@ -14,16 +14,17 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject instanciablePerson;
     [SerializeField] private GameObject instanciableNameTag;
     private List<GameObject> _peopleList;
-    [SerializeField] public static int totalPeopleCount;
-    [SerializeField] public static int totalimpostorsCount;
+    public static int totalPeopleCount;
+    public static int totalimpostorsCount;
     private static Vector3 _spawnZone = new Vector3(0, 0, 0);
     private static Vector3 _deadCorner = new Vector3(-5, 0, -5);
-    public static bool inVote = false;
+    public static bool inVote;
      
     private static Game _instance;
 
     public void Awake()
     {
+        inVote = false;
         if (_instance == null) _instance = this;
         if (totalPeopleCount == 0 || totalimpostorsCount == 0)
         {
@@ -35,7 +36,7 @@ public class Game : MonoBehaviour
     //Spawn everyone, assign them an IP.
     private void StartGame()
     {
-        
+        _peopleList.Clear();
         //add impostors
         for (int i = 0; i < totalimpostorsCount; i++)
         {
@@ -136,7 +137,7 @@ public class Game : MonoBehaviour
         }
 
         if (impostors == 0) YouWin(alivePeople);
-        else if (impostors == alivePeople) YouLose();
+        else if (1+alivePeople-impostors  <= impostors) YouLose();
     }
 
     private static void YouWin(int savedPpl)
@@ -147,7 +148,7 @@ public class Game : MonoBehaviour
 
     private static void YouLose()
     {
-        EndScreen.text = "You Lose! All innocent people died.";
+        EndScreen.text = "You Lose! Impostors took over the ship..";
         SceneManager.LoadScene("EndScreen");
     }
 }
