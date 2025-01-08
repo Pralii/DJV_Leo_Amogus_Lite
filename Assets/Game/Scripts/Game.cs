@@ -52,6 +52,14 @@ public class Game : MonoBehaviour
         }
     }
     
+    
+
+    public static void getsVoted(PeopleAI susGuy)
+    {
+        susGuy.Unalive();
+        ListManager.ClearScreen();
+    }
+
     void Start()
     {
         _peopleList = new List<GameObject>();

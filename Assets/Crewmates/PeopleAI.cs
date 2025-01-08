@@ -11,15 +11,27 @@ public class PeopleAI : MonoBehaviour
     [SerializeField] private GameObject originalCorpse;
     private Vector3 _interestPoint;
     private Vector3 _targetPlace;
-    private bool _isAlive;
+    public bool isAlive;
     public bool isImpostor;
+    private string name;
 
     // Start is called before the first frame update
     void Start()
     {
-        _isAlive = true;
+        isAlive = true;
         GetComponentInChildren<Renderer>().material.color = Color.HSVToRGB(Random.value, 1-Random.value*0.5f, 1-Random.value*0.5f);
+        name = "Mario";
         StartCoroutine(MoveTowardsInterest());
+    }
+
+    public Color getColor()
+    {
+        return GetComponentInChildren<Renderer>().material.color;
+    }
+
+    public string getName()
+    {
+        return name;
     }
 
     public void DefineNewInterest(Vector3 interestPoint)
@@ -31,7 +43,7 @@ public class PeopleAI : MonoBehaviour
 
     public void Unalive()
     {
-        _isAlive = false;
+        isAlive = false;
         //Change model
         transform.position = new Vector3(transform.position.x , 0.25f, transform.position.z);
         transform.Rotate(Vector3.forward, 90);;
@@ -39,9 +51,9 @@ public class PeopleAI : MonoBehaviour
 
     public IEnumerator MoveTowardsInterest()
     {
-        if (_isAlive)
+        if (isAlive)
         {
-            while (_isAlive && (_targetPlace - transform.position).magnitude > 0.2f)
+            while (isAlive && (_targetPlace - transform.position).magnitude > 0.2f)
             {
                 transform.LookAt(_targetPlace);
                 transform.position += (speed * Time.deltaTime * (_targetPlace - transform.position).normalized);
@@ -56,5 +68,6 @@ public class PeopleAI : MonoBehaviour
 
         yield return null;
     }
-    
+
+    public void GetDisinterested();
 }
