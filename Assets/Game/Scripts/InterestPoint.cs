@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InterestPoint : MonoBehaviour
 {
-    //Interest point does the kills and redirections: It is aware of the people that must gather around it, who is close or not. When everyone is gathered, it waits a lil' and then tries to get a murder going. Successful or not it redirects everyone towards another interest point.
+    //Interest point does the kills and redirections: It is aware of the people that must gather around it, who is close or not. When everyone is gathered, it waits a little and then tries to get a murder going. Successful or not it redirects everyone towards another interest point.
     [SerializeField] private List<InterestPoint> otherInterestPoints;
     [SerializeField] private float ipRadius;
     private List<PeopleAI> _interestedPeople;
@@ -17,9 +17,10 @@ public class InterestPoint : MonoBehaviour
         _interestedPeople = new List<PeopleAI>();
         _interestedPeopleTransforms = new List<Transform>();
     }
+    
+    //Function to check if the interest point is visible from the camera. (Used to know if a kill is pssible)
     private bool isVisible()
     {
-        //This is Code with missing elements ? (Camera?)
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
 
         foreach (var plane in planes)
@@ -29,11 +30,10 @@ public class InterestPoint : MonoBehaviour
                 return false;
             }
         }
-
         return true;
     }
     
-    //check the number of impostors/innocent in the people present, and if the player is not here, UNALIVE an innocent
+    //check the number of impostors/innocent in the people present, and if the player is not here, UNALIVE an innocent.
     private IEnumerator TryKilling()
     {
 
@@ -70,6 +70,7 @@ public class InterestPoint : MonoBehaviour
         yield return null;
     }
 
+    
     public void GetThisPersonInterested(PeopleAI personAI)
     {
         _interestedPeople.Add(personAI);
@@ -81,10 +82,13 @@ public class InterestPoint : MonoBehaviour
     //Check if everyonen is here, then try killing, with a cooldown. Then redirect everyone to other places.
     void Update()
     {
+
         if (_interestedPeople.Count != 0)
         {
+            //Remove dead people and/or reset ourselves if a vote is ongoing.
             _interestedPeople.RemoveAll(x => !x.isAlive || Game.inVote);
 
+            //Count close people
             int closePeopleNbr = 0;
             foreach (var t in _interestedPeopleTransforms)
             {
@@ -95,6 +99,7 @@ public class InterestPoint : MonoBehaviour
                 }
             }
 
+            //if everyone is close for enough time, KIILLLL
             if (closePeopleNbr >= _interestedPeople.Count)
             {
                 _killCharge -= Time.deltaTime;

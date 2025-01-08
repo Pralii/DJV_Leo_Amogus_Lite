@@ -26,6 +26,8 @@ public class Game : MonoBehaviour
     {
         inVote = false;
         if (_instance == null) _instance = this;
+        
+        //default parameters 
         if (totalPeopleCount == 0 || totalimpostorsCount == 0)
         {
             totalPeopleCount = 5;
@@ -33,7 +35,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    //Spawn everyone, assign them an IP.
+    //Spawn everyone, assign them an Interest Point
     private void StartGame()
     {
         _peopleList.Clear();
@@ -44,7 +46,7 @@ public class Game : MonoBehaviour
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
             PeopleAI newPersonAI = newPerson.GetComponent<PeopleAI>();
             newPersonAI.isImpostor = true;
-            interestList[Random.Range(0, interestList.Count)].GetThisPersonInterested(newPersonAI);
+            interestList[Random.Range(0, interestList.Count)].GetThisPersonInterested(newPersonAI); //Assign an IP
             _peopleList.Add(newPerson);
             newPerson.SetActive(true);
         }
@@ -53,9 +55,10 @@ public class Game : MonoBehaviour
         {
             Vector2 displacement = 4f * Random.insideUnitCircle;
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
+            
             PeopleAI newPersonAI = newPerson.GetComponent<PeopleAI>();
             newPersonAI.isImpostor = false;
-            interestList[Random.Range(0, interestList.Count)].GetThisPersonInterested(newPersonAI);
+            interestList[Random.Range(0, interestList.Count)].GetThisPersonInterested(newPersonAI); //assign an IP
             _peopleList.Add(newPerson);
             newPerson.SetActive(true);
         }
@@ -79,11 +82,14 @@ public class Game : MonoBehaviour
         foreach (var people in _instance._peopleList)
         {
             var peopleAI = people.GetComponent<PeopleAI>();
+            
+            //if alive, teleport them to spawn (and make them stay with a new interest point here)
             if (peopleAI.isAlive)
             {
                 people.transform.position = _spawnZone;
                 peopleAI.DefineNewInterest(_spawnZone);
             }
+            //if dead, put them in the dead corner (it's funny)
             else
             {
                 if ((people.transform.position - _deadCorner).magnitude > 1f)
@@ -92,7 +98,6 @@ public class Game : MonoBehaviour
                     people.transform.position = _deadCorner + new Vector3(displacement.x, 0, displacement.y);
                 }
             }
-
             peopleAIList.Add(peopleAI);
         }
         ListManager.SetupList(peopleAIList);
@@ -102,13 +107,13 @@ public class Game : MonoBehaviour
     public static void finishVote(PeopleAI susGuy)
     {
         inVote = false;
-        if (susGuy!=null) susGuy.Unalive();
+        if (susGuy!=null) susGuy.Unalive();//execute in place the foolish crew who defiled our community ! Obviously an impostor (joke).
 
+        //Reassign everyone an interest point.
         foreach (var people in _instance._peopleList)
         {
             _instance.interestList[Random.Range(0, _instance.interestList.Count)].GetThisPersonInterested(people.GetComponent<PeopleAI>());
         }
-
         ListManager.ClearScreen();
         EmergencyButton.ResetTimer();
         CheckState();

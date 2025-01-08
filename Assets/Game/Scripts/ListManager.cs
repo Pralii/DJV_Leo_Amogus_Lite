@@ -14,6 +14,7 @@ public class ListManager : MonoBehaviour
         _instance = this;
     }
 
+    //Creates the UI profiles for you to click on.
     public static void SetupList(List<PeopleAI> crew)
     {
         foreach (var crewmate in crew)

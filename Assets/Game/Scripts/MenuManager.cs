@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-
+    
     private void StartGame(int totalCrew, int impostors)
     {
         Game.totalPeopleCount = totalCrew;

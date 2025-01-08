@@ -11,6 +11,7 @@ public class UIProfile : MonoBehaviour, IPointerDownHandler
     [SerializeField] private TMP_Text profileName;
     private PeopleAI me;
 
+    //If a profile is clicked, they are voted off. If already dead, it finishes the vote without killing anyone.
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
         if (!me.isAlive) Game.finishVote(null);

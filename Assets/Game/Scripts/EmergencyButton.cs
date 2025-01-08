@@ -27,6 +27,7 @@ public class EmergencyButton : MonoBehaviour
         _emergencyTimer = emergencyCooldown*2;
     }
 
+    //Diminish the timer and check for a button press
     void Update()
     {
         if (_emergencyTimer > 0) timerText.text = _emergencyTimer.ToString("00");

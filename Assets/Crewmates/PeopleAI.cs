@@ -17,8 +17,7 @@ public class PeopleAI : MonoBehaviour
     private string name;
     private string[] _nameList = {"Alice","Bob","Charlie","David","Eve","Frank","Gabriel","Holmes","Ingrid","Joejoe","Karen","Ligma","Monica","Niko","Oscar","Pierre-Emmanuel","Quentin","Rick","Simon","Tom","Ursula","Victoriano","Williams","Yakari","Zoe"} ;
     
-
-    // Start is called before the first frame update
+    //Assign a random color and name.
     void Start()
     {
         isAlive = true;
@@ -38,6 +37,7 @@ public class PeopleAI : MonoBehaviour
         return name;
     }
 
+    
     public void DefineNewInterest(Vector3 interestPoint)
     { 
         _interestPoint = interestPoint;
@@ -45,6 +45,7 @@ public class PeopleAI : MonoBehaviour
         _targetPlace = interestPoint + new Vector3(displacement.x, 0, displacement.y);
     }
 
+    //Fall on the ground, and check the game state.
     public void Unalive()
     {
         isAlive = false;

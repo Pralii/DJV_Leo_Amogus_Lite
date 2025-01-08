@@ -21,16 +21,11 @@ public class PlayerCharacter : MonoBehaviour
         {
             var targetDirection = Vector3.right * Input.GetAxisRaw("Horizontal") + Vector3.forward * Input.GetAxisRaw("Vertical");
             _characterController.Move(targetDirection.normalized * (speed * Time.deltaTime));
-            //_animator.SetBool("IsMoving", true);
 
             transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
                 Quaternion.LookRotation(targetDirection),
                 angularSpeed * Time.deltaTime);
-        }
-        else
-        {
-            //_animator.SetBool("IsMoving", false);
         }
         
     }

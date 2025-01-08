@@ -10,6 +10,7 @@ public class EndScreen : MonoBehaviour
 
     public void Start()
     {
+        //Default text
         if (text == null || text == "") text = "How did you get here?";
         _tmpText.text = text;
     }
