@@ -110,6 +110,7 @@ public class Game : MonoBehaviour
         }
 
         ListManager.ClearScreen();
+        EmergencyButton.ResetTimer();
         CheckState();
 
     }
