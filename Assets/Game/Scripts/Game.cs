@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
@@ -12,8 +14,8 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject instanciablePerson;
     [SerializeField] private GameObject instanciableNameTag;
     private List<GameObject> _peopleList;
-    [SerializeField] private int totalPeopleCount;
-    [SerializeField] private int impostorsCount;
+    [SerializeField] public static int totalPeopleCount;
+    [SerializeField] public static int totalimpostorsCount;
     private static Vector3 _spawnZone = new Vector3(0, 0, 0);
     private static Vector3 _deadCorner = new Vector3(-5, 0, -5);
     public static bool inVote = false;
@@ -23,14 +25,19 @@ public class Game : MonoBehaviour
     public void Awake()
     {
         if (_instance == null) _instance = this;
-        
+        if (totalPeopleCount == 0 || totalimpostorsCount == 0)
+        {
+            totalPeopleCount = 5;
+            totalimpostorsCount = 2;
+        }
     }
 
     //Spawn everyone, assign them an IP.
     private void StartGame()
     {
+        
         //add impostors
-        for (int i = 0; i < impostorsCount; i++)
+        for (int i = 0; i < totalimpostorsCount; i++)
         {
             Vector2 displacement = 4f * Random.insideUnitCircle;
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
@@ -41,7 +48,7 @@ public class Game : MonoBehaviour
             newPerson.SetActive(true);
         }
         //add normal people
-        for (int i = impostorsCount; i < totalPeopleCount; i++)
+        for (int i = totalimpostorsCount; i < totalPeopleCount; i++)
         {
             Vector2 displacement = 4f * Random.insideUnitCircle;
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
@@ -51,6 +58,15 @@ public class Game : MonoBehaviour
             _peopleList.Add(newPerson);
             newPerson.SetActive(true);
         }
+        //shuffle
+        for (int i = _peopleList.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            var temp = _peopleList[i];
+            _peopleList[i] = _peopleList[j];
+            _peopleList[j] = temp;
+        }
+
     }
 
     public static void StartVote()
@@ -93,7 +109,8 @@ public class Game : MonoBehaviour
         }
 
         ListManager.ClearScreen();
-        
+        CheckState();
+
     }
 
     void Start()
@@ -103,9 +120,34 @@ public class Game : MonoBehaviour
     }
 
     
-    //Check for vote, menu, and win/lose condition.
-    void Update()
+    //Check for win/lose condition.
+    public static void CheckState()
     {
-        
+        int alivePeople = 0;
+        int impostors = 0;
+        foreach (var person in _instance._peopleList)
+        {
+            PeopleAI peopleAI= person.GetComponent<PeopleAI>();
+            if (peopleAI.isAlive)
+            {
+                alivePeople++;
+                if (peopleAI.isImpostor) impostors++;
+            }
+        }
+
+        if (impostors == 0) YouWin(alivePeople);
+        else if (impostors == alivePeople) YouLose();
+    }
+
+    private static void YouWin(int savedPpl)
+    {
+        EndScreen.text = "You Win! All impostors were executed, you saved " + savedPpl + " people.";
+        SceneManager.LoadScene("EndScreen");
+    }
+
+    private static void YouLose()
+    {
+        EndScreen.text = "You Lose! All innocent people died.";
+        SceneManager.LoadScene("EndScreen");
     }
 }

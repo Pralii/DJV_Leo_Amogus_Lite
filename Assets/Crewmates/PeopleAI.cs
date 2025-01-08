@@ -50,7 +50,8 @@ public class PeopleAI : MonoBehaviour
         isAlive = false;
         transform.position = new Vector3(transform.position.x , 0.25f, transform.position.z);
         transform.Rotate(Vector3.forward, 90);
-        
+        Game.CheckState();
+
     }
 
     public IEnumerator MoveTowardsInterest()
