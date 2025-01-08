@@ -83,6 +83,8 @@ public class InterestPoint : MonoBehaviour
     {
         if (_interestedPeople.Count != 0)
         {
+            _interestedPeople.RemoveAll(x => !x.isAlive || Game.inVote);
+
             int closePeopleNbr = 0;
             foreach (var t in _interestedPeopleTransforms)
             {

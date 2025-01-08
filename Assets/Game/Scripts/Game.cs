@@ -13,16 +13,15 @@ public class Game : MonoBehaviour
     private List<GameObject> _peopleList;
     [SerializeField] private int totalPeopleCount;
     [SerializeField] private int impostorsCount;
-    private Vector3 _spawnZone = new Vector3(0, 0, 0);
+    private static Vector3 _spawnZone = new Vector3(0, 0, 0);
+    private static Vector3 _deadCorner = new Vector3(-5, 0, -5);
+    public static bool inVote = false;
 
-    public static Game Instance;
-    private void ShowMenuUI()
-    {
-    }
+    private static Game _instance;
 
     public void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (_instance == null) _instance = this;
     }
 
     //Spawn everyone, assign them an IP.
@@ -51,13 +50,45 @@ public class Game : MonoBehaviour
             newPerson.SetActive(true);
         }
     }
-    
-    
+
+    public static void StartVote()
+    {
+        if (inVote) return;
+        inVote = true;
+        List<PeopleAI> peopleAIList = new List<PeopleAI>();
+        
+        foreach (var people in _instance._peopleList)
+        {
+            var peopleAI = people.GetComponent<PeopleAI>();
+            if (peopleAI.isAlive)
+            {
+                people.transform.position = _spawnZone;
+                peopleAI.DefineNewInterest(_spawnZone);
+            }
+            else
+            {
+                Vector2 displacement = Random.insideUnitCircle;
+                people.transform.position = _deadCorner + new Vector3(displacement.x, 0, displacement.y);
+            }
+
+            peopleAIList.Add(peopleAI);
+        }
+        ListManager.SetupList(peopleAIList);
+        
+    }
 
     public static void getsVoted(PeopleAI susGuy)
     {
+        inVote = false;
         susGuy.Unalive();
+
+        foreach (var people in _instance._peopleList)
+        {
+            _instance.interestList[Random.Range(0, _instance.interestList.Count)].GetThisPersonInterested(people.GetComponent<PeopleAI>());
+        }
+
         ListManager.ClearScreen();
+        
     }
 
     void Start()

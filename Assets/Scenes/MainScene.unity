@@ -2444,7 +2444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357c79587fa2e5043a426832c69e148d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiProfilePrefab: {fileID: 0}
+  _uiProfilePrefab: {fileID: 6303520162325582847, guid: d8e965e0a16e05d4aa85ad6c8a9a57c4, type: 3}
 --- !u!114 &1199583960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2662,6 +2662,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1267970858}
+  - component: {fileID: 1267970859}
   m_Layer: 0
   m_Name: Emergency Table
   m_TagString: Untagged
@@ -2690,6 +2691,20 @@ Transform:
   - {fileID: 1186135967}
   m_Father: {fileID: 126527656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1267970859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267970857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c48009c0a103f44ba3862cf84f59b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1548968007}
+  emergencyButtonRenderer: {fileID: 1186135969}
 --- !u!1001 &1314573620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4324,7 +4339,6 @@ MonoBehaviour:
   speed: 5
   angularSpeed: 1
   ipProximity: 4
-  originalCorpse: {fileID: 158517201}
   isAlive: 0
   isImpostor: 0
 --- !u!1 &1823618425

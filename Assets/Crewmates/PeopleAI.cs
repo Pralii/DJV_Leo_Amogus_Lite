@@ -8,7 +8,6 @@ public class PeopleAI : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float angularSpeed;
     [SerializeField] private float ipProximity;
-    [SerializeField] private GameObject originalCorpse;
     private Vector3 _interestPoint;
     private Vector3 _targetPlace;
     public bool isAlive;
@@ -44,9 +43,9 @@ public class PeopleAI : MonoBehaviour
     public void Unalive()
     {
         isAlive = false;
-        //Change model
         transform.position = new Vector3(transform.position.x , 0.25f, transform.position.z);
-        transform.Rotate(Vector3.forward, 90);;
+        transform.Rotate(Vector3.forward, 90);
+        
     }
 
     public IEnumerator MoveTowardsInterest()
@@ -69,5 +68,4 @@ public class PeopleAI : MonoBehaviour
         yield return null;
     }
 
-    public void GetDisinterested();
 }

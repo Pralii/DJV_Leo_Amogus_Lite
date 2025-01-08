@@ -9,17 +9,15 @@ public class PlayerCharacter : MonoBehaviour
     private Camera _mainCamera;
     private CharacterController _characterController;
     //private Animator _animator;
-    
     protected void Awake()
     {
         _mainCamera = Camera.main;
         _characterController = GetComponent<CharacterController>();
-        //_animator = GetComponentInChildren<Animator>();
     }
     
     protected void Update()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        if (!Game.inVote && (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0))
         {
             var targetDirection = Vector3.right * Input.GetAxisRaw("Horizontal") + Vector3.forward * Input.GetAxisRaw("Vertical");
             _characterController.Move(targetDirection.normalized * (speed * Time.deltaTime));

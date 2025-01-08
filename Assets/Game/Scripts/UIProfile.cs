@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIProfile : MonoBehaviour
+public class UIProfile : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] private Image profileImage;
-    [SerializeField] private TextMeshPro profileName;
+    [SerializeField] private TMP_Text profileName;
     private PeopleAI me;
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
@@ -16,6 +16,7 @@ public class UIProfile : MonoBehaviour
         if (!me.isAlive) return;
         Game.getsVoted(me);
     }
+    
 
 
     public void SetProfile(PeopleAI people)
