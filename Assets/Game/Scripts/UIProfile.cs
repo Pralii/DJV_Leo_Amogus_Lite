@@ -13,8 +13,8 @@ public class UIProfile : MonoBehaviour, IPointerDownHandler
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
-        if (!me.isAlive) return;
-        Game.getsVoted(me);
+        if (!me.isAlive) Game.finishVote(null);
+        else Game.finishVote(me);
     }
     
 
@@ -29,7 +29,7 @@ public class UIProfile : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            profileName.text = "DED";
+            profileName.text = me.getName()+" (dead)";
         }
     }
 }

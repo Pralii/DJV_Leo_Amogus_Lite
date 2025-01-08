@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PeopleAI : MonoBehaviour
@@ -8,18 +9,22 @@ public class PeopleAI : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float angularSpeed;
     [SerializeField] private float ipProximity;
+    [SerializeField] private TMP_Text nameTag;
     private Vector3 _interestPoint;
     private Vector3 _targetPlace;
     public bool isAlive;
     public bool isImpostor;
     private string name;
+    private string[] _nameList = {"Alice","Bob","Charlie","David","Eve","Frank","Gabriel","Holmes","Ingrid","Joejoe","Karen","Ligma","Monica","Niko","Oscar","Pierre-Emmanuel","Quentin","Rick","Simon","Tom","Ursula","Victoriano","Williams","Yakari","Zoe"} ;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         isAlive = true;
         GetComponentInChildren<Renderer>().material.color = Color.HSVToRGB(Random.value, 1-Random.value*0.5f, 1-Random.value*0.5f);
-        name = "Mario";
+        name = _nameList[Random.Range(0, _nameList.Length)];
+        nameTag.text = name;
         StartCoroutine(MoveTowardsInterest());
     }
 
@@ -34,10 +39,10 @@ public class PeopleAI : MonoBehaviour
     }
 
     public void DefineNewInterest(Vector3 interestPoint)
-    {
+    { 
         _interestPoint = interestPoint;
-    Vector2 displacement = Random.value*ipProximity* Random.insideUnitCircle;
-    _targetPlace = interestPoint + new Vector3(displacement.x, 0, displacement.y);
+        Vector2 displacement = ipProximity* Random.insideUnitCircle;
+        _targetPlace = interestPoint + new Vector3(displacement.x, 0, displacement.y);
     }
 
     public void Unalive()

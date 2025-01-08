@@ -10,18 +10,20 @@ public class Game : MonoBehaviour
     [SerializeField] private List<InterestPoint> interestList;
     [SerializeField] private PlayerCharacter player;
     [SerializeField] private GameObject instanciablePerson;
+    [SerializeField] private GameObject instanciableNameTag;
     private List<GameObject> _peopleList;
     [SerializeField] private int totalPeopleCount;
     [SerializeField] private int impostorsCount;
     private static Vector3 _spawnZone = new Vector3(0, 0, 0);
     private static Vector3 _deadCorner = new Vector3(-5, 0, -5);
     public static bool inVote = false;
-
+     
     private static Game _instance;
 
     public void Awake()
     {
         if (_instance == null) _instance = this;
+        
     }
 
     //Spawn everyone, assign them an IP.
@@ -41,7 +43,7 @@ public class Game : MonoBehaviour
         //add normal people
         for (int i = impostorsCount; i < totalPeopleCount; i++)
         {
-            Vector2 displacement = 5f * Random.insideUnitCircle;
+            Vector2 displacement = 4f * Random.insideUnitCircle;
             var newPerson = Instantiate(instanciablePerson, _spawnZone + new Vector3(displacement.x, 0, displacement.y), Quaternion.identity);
             PeopleAI newPersonAI = newPerson.GetComponent<PeopleAI>();
             newPersonAI.isImpostor = false;
@@ -67,8 +69,11 @@ public class Game : MonoBehaviour
             }
             else
             {
-                Vector2 displacement = Random.insideUnitCircle;
-                people.transform.position = _deadCorner + new Vector3(displacement.x, 0, displacement.y);
+                if ((people.transform.position - _deadCorner).magnitude > 1f)
+                {
+                    Vector2 displacement = Random.insideUnitCircle;
+                    people.transform.position = _deadCorner + new Vector3(displacement.x, 0, displacement.y);
+                }
             }
 
             peopleAIList.Add(peopleAI);
@@ -77,10 +82,10 @@ public class Game : MonoBehaviour
         
     }
 
-    public static void getsVoted(PeopleAI susGuy)
+    public static void finishVote(PeopleAI susGuy)
     {
         inVote = false;
-        susGuy.Unalive();
+        if (susGuy!=null) susGuy.Unalive();
 
         foreach (var people in _instance._peopleList)
         {
