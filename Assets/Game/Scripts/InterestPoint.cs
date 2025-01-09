@@ -87,6 +87,7 @@ public class InterestPoint : MonoBehaviour
         {
             //Remove dead people and/or reset ourselves if a vote is ongoing.
             _interestedPeople.RemoveAll(x => !x.isAlive || Game.inVote);
+            
 
             //Count close people
             int closePeopleNbr = 0;
@@ -98,10 +99,11 @@ public class InterestPoint : MonoBehaviour
                     closePeopleNbr++;
                 }
             }
-
+            //Debug.Log("There are " + closePeopleNbr + " people close out of " + _interestedPeople.Count + ".");
             //if everyone is close for enough time, KIILLLL
             if (closePeopleNbr >= _interestedPeople.Count)
             {
+                
                 _killCharge -= Time.deltaTime;
                 if (_killCharge <= 0f)
                 {
